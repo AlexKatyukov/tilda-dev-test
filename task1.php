@@ -17,8 +17,6 @@ class StairsPrinter
 
     private $start;
     private $finish;
-    private $current;
-    private $count = 1;
 
     /**
      * @param int $start
@@ -37,27 +35,24 @@ class StairsPrinter
     public function handle(): string
     {
         $res = [];
-        $this->current = $this->start;
-        while ($this->current <= $this->finish) {
-            $res[] = $this->getNewLevel();
-            $this->count++;
-        }
-        return implode(self::STRING_DELIMETER, $res);
-    }
 
-    /**
-     * Возвращает один уровень «лесенки» от $this->current в количестве $this->count
-     */
-    private function getNewLevel(): string
-    {
-        $res = [];
-        for ($i = 0; $i < $this->count; $i++) {
-            if ($this->current > $this->finish) {
-                break;
+        $current = $this->start;
+        $count = 1;
+        while ($current <= $this->finish) {
+            $newLevel = [];
+            for ($i = 0; $i < $count; $i++) {
+                if ($current > $this->finish) {
+                    break;
+                }
+                $newLevel[] = $current++;
             }
-            $res[] = $this->current++;
+
+            $res[] = implode(self::ELEMENT_DELIMETER, $newLevel);
+
+            $count++;
         }
-        return implode(self::ELEMENT_DELIMETER, $res);
+
+        return implode(self::STRING_DELIMETER, $res);
     }
 }
 

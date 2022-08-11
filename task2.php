@@ -13,7 +13,6 @@ class ArrayGenerator
     private $width;
     private $min;
     private $max;
-    private $array = [];
 
     public function __construct(int $height, int $width, int $min, int $max)
     {
@@ -29,26 +28,29 @@ class ArrayGenerator
      */
     public function handle(): string
     {
-        $this->fillArray();
-        return $this->getArrayHtml();
+        $array = $this->getArray();
+        return $this->getArrayHtml($array);
     }
 
     /**
      * Заполняет массив
      */
-    private function fillArray(): void
+    private function getArray(): array
     {
-        foreach (range(1, $this->height) as $row) {
-            foreach (range(1, $this->width) as $col) {
-                $this->array[$row][$col] = rand($this->min, $this->max);
+        $array = [];
+        for ($row = 0; $row < $this->height; $row++) {
+            for ($col = 0; $col < $this->width; $col++) {
+                $array[$row][$col] = rand($this->min, $this->max);
             }
         }
+
+        return $array;
     }
 
     /**
      * Генерирует и возвращает html с массивом и суммами
      */
-    private function getArrayHtml(): string
+    private function getArrayHtml(array $array): string
     {
         $colSum = [];
         $html = '<table>';
@@ -57,25 +59,19 @@ class ArrayGenerator
             $colSum[$col] = 0;
         }
 
-        foreach (range(1, $this->height) as $row) {
+        for ($row = 0; $row < $this->height; $row++) {
             $html .= '<tr>';
-            foreach (range(1, $this->width) as $col) {
-                $html .= '<td>';
-                $html .= $this->array[$row][$col];
-                $html .= '</td>';
-                $colSum[$col] += $this->array[$row][$col];
+            for ($col = 0; $col < $this->width; $col++) {
+                $html .= '<td>' . $array[$row][$col] . '</td>';
+                $colSum[$col] += $array[$row][$col];
             }
-            $html .= '<td><b>';
-            $html .= array_sum($this->array[$row]);
-            $html .= '</b></td>';
+            $html .= '<td><b>' . array_sum($array[$row]) . '</b></td>';
             $html .= '</tr>';
         }
 
         $html .= '<tr>';
-        foreach (range(1, $this->width) as $col) {
-            $html .= '<td><b>';
-            $html .= $colSum[$col];
-            $html .= '</b></td>';
+        for ($col = 0; $col < $this->width; $col++) {
+            $html .= '<td><b>' . $colSum[$col] . '</b></td>';
         }
         $html .= '</tr>';
 
