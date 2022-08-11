@@ -53,6 +53,10 @@ class ArrayGenerator
         $colSum = [];
         $html = '<table>';
 
+        for ($col = 0; $col < $this->width; $col++) {
+            $colSum[$col] = 0;
+        }
+
         foreach (range(1, $this->height) as $row) {
             $html .= '<tr>';
             foreach (range(1, $this->width) as $col) {
